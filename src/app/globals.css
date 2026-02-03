@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+:root {
+  --bg-primary: #0D0D0F;
+  --bg-secondary: #141418;
+  --bg-tertiary: #1A1A20;
+  --border: #2A2A35;
+  --text-primary: #E8E8E8;
+  --text-secondary: #8E8E9A;
+  --accent-cyan: #00F0FF;
+  --accent-green: #00FF88;
+  --accent-red: #FF4444;
+  --accent-amber: #FFB800;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

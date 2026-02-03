@@ -1,137 +1,48 @@
-import { ApiKeyCheck } from "@/components/ApiKeyCheck";
-import Image from "next/image";
+"use client";
 
-const KeyFilesSection = () => (
-  <div className="bg-white px-8 py-4">
-    <h2 className="text-xl font-semibold mb-4">How it works:</h2>
-    <ul className="space-y-4 text-gray-600">
-      <li className="flex items-start gap-2">
-        <span>📄</span>
-        <span>
-          <code className="font-medium">src/app/layout.tsx</code> - Main layout
-          with TamboProvider
-        </span>
-      </li>
-      <li className="flex items-start gap-2">
-        <span>📄</span>
-        <span>
-          <code className="font-medium font-mono">src/app/chat/page.tsx</code> -
-          Chat page with TamboProvider and MCP integration
-        </span>
-      </li>
-      <li className="flex items-start gap-2">
-        <span>📄</span>
-        <span>
-          <code className="font-medium font-mono">
-            src/app/interactables/page.tsx
-          </code>{" "}
-          - Interactive demo page with tools and components
-        </span>
-      </li>
-      <li className="flex items-start gap-2">
-        <span>📄</span>
-        <span>
-          <code className="font-medium font-mono">
-            src/components/tambo/message-thread-full.tsx
-          </code>{" "}
-          - Chat UI
-        </span>
-      </li>
-      <li className="flex items-start gap-2">
-        <span>📄</span>
-        <span>
-          <code className="font-medium font-mono">
-            src/components/tambo/graph.tsx
-          </code>{" "}
-          - A generative graph component
-        </span>
-      </li>
-      <li className="flex items-start gap-2">
-        <span>📄</span>
-        <span>
-          <code className="font-medium font-mono">
-            src/services/population-stats.ts
-          </code>{" "}
-          - Example tool implementation with mock population data
-        </span>
-      </li>
-      <li className="flex items-start gap-2">
-        <span className="text-blue-500">📄</span>
-        <span>
-          <code className="font-medium font-mono">src/lib/tambo.ts</code> -
-          Component and tool registration
-        </span>
-      </li>
-      <li className="flex items-start gap-2">
-        <span className="text-blue-500">📄</span>
-        <span>
-          <code className="font-medium font-mono">README.md</code> - For more
-          details check out the README
-        </span>
-      </li>
-    </ul>
-    <div className="flex gap-4 flex-wrap mt-4">
-      <a
-        href="https://docs.tambo.co"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="px-6 py-3 rounded-md font-medium transition-colors text-lg mt-4 border border-gray-300 hover:bg-gray-50"
-      >
-        View Docs
-      </a>
-      <a
-        href="https://tambo.co/dashboard"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="px-6 py-3 rounded-md font-medium transition-colors text-lg mt-4 border border-gray-300 hover:bg-gray-50"
-      >
-        Dashboard
-      </a>
-    </div>
-  </div>
-);
+import { useWallet } from "@/hooks/useWallet";
+import WalletStatus from "@/components/WalletStatus";
+import Workbench from "@/components/WorkBench";
+// Import the Tambo chat component from the scaffold
+// It's usually MessageThreadFull or MessageThreadCollapsible
+import { MessageThreadFull } from "@/components/tambo/message-thread-full";
 
 export default function Home() {
+  const wallet = useWallet();
+
   return (
-    <div className="min-h-screen p-8 flex flex-col items-center justify-center font-[family-name:var(--font-geist-sans)]">
-      <main className="max-w-2xl w-full space-y-8">
-        <div className="flex flex-col items-center">
-          <a href="https://tambo.co" target="_blank" rel="noopener noreferrer">
-            <Image
-              src="/Octo-Icon.svg"
-              alt="Tambo AI Logo"
-              width={80}
-              height={80}
-              className="mb-4"
-            />
-          </a>
-          <h1 className="text-4xl text-center">tambo-ai chat template</h1>
+    <div className="flex flex-col h-screen bg-[#0D0D0F]">
+      {/* Top Bar */}
+      <header className="flex items-center justify-between px-6 py-3 border-b border-[#2A2A35]">
+        <div className="flex items-center gap-3">
+          <h1 className="text-lg font-semibold text-[#E8E8E8]">
+            Contract Studio
+          </h1>
+          <span className="text-xs px-2 py-0.5 rounded bg-[#1A1A20] text-[#00F0FF] border border-[#00F0FF]/20">
+            Testnet
+          </span>
+        </div>
+        <WalletStatus
+          connected={wallet.connected}
+          address={wallet.address}
+          chainName={wallet.chainName}
+          balance={wallet.balance}
+          onConnect={wallet.connect}
+        />
+      </header>
+
+      {/* Main Content — Split Panel */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left: Chat Panel (40%) */}
+        <div className="w-[40%] border-r border-[#2A2A35] flex flex-col">
+          <MessageThreadFull />
         </div>
 
-        <div className="w-full space-y-8">
-          <div className="bg-white px-8 py-4">
-            <h2 className="text-xl font-semibold mb-4">Setup Checklist</h2>
-            <ApiKeyCheck>
-              <div className="flex gap-4 flex-wrap">
-                <a
-                  href="/chat"
-                  className="px-6 py-3 rounded-md font-medium shadow-sm transition-colors text-lg mt-4 bg-[#7FFFC3] hover:bg-[#72e6b0] text-gray-800"
-                >
-                  Go to Chat →
-                </a>
-                <a
-                  href="/interactables"
-                  className="px-6 py-3 rounded-md font-medium shadow-sm transition-colors text-lg mt-4 bg-[#FFE17F] hover:bg-[#f5d570] text-gray-800"
-                >
-                  Interactables Demo →
-                </a>
-              </div>
-            </ApiKeyCheck>
-          </div>
-
-          <KeyFilesSection />
+        {/* Right: Workbench (60%) */}
+        <div className="w-[60%]">
+          <Workbench />
         </div>
-      </main>
+      </div>
     </div>
   );
 }
