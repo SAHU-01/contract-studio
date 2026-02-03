@@ -2,7 +2,7 @@
 
 import "./globals.css";
 import { TamboProvider } from "@tambo-ai/react";
-import { components } from "@/lib/tambo";
+import { components, tools } from "@/lib/tambo";
 
 export default function RootLayout({
   children,
@@ -15,6 +15,7 @@ export default function RootLayout({
         <TamboProvider
           apiKey={process.env.NEXT_PUBLIC_TAMBO_API_KEY!}
           components={components}
+          tools={tools}
         >
           {children}
         </TamboProvider>

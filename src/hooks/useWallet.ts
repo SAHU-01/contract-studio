@@ -1,162 +1,142 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { ethers } from "ethers";
-import { getChainById } from "@/lib/chains";
+import { SUPPORTED_CHAINS } from "@/lib/chains";
 
-export interface WalletState {
+interface WalletState {
   connected: boolean;
-  address: string | null;
-  chainId: number | null;
-  balance: string | null;
-  chainName: string | null;
+  address: string;
+  chainId: number;
+  chainName: string;
+  balance: string;
+  connect: () => Promise<void>;
+  disconnect: () => void;
+  switchChain: (chainId: number) => Promise<void>;
 }
 
-export function useWallet() {
-  const [state, setState] = useState<WalletState>({
-    connected: false,
-    address: null,
-    chainId: null,
-    balance: null,
-    chainName: null,
-  });
+export function useWallet(): WalletState {
+  const [connected, setConnected] = useState(false);
+  const [address, setAddress] = useState("");
+  const [chainId, setChainId] = useState(0);
+  const [balance, setBalance] = useState("0.0000");
 
-  const updateBalance = useCallback(async (address: string) => {
-    if (!window.ethereum) return;
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const balance = await provider.getBalance(address);
-      setState((prev) => ({
-        ...prev,
-        balance: ethers.formatEther(balance),
-      }));
-    } catch (e) {
-      console.error("Failed to get balance:", e);
-    }
-  }, []);
+  const getChainName = (id: number) => {
+    const chain = Object.values(SUPPORTED_CHAINS).find(
+      (c) => c.chainId === id
+    );
+    return chain?.name || (id ? "Chain " + id : "Not Connected");
+  };
 
-  const updateChain = useCallback(async () => {
-    if (!window.ethereum) return;
+  const updateBalance = useCallback(async (addr: string) => {
+    if (!window.ethereum || !addr) return;
     try {
-      const chainIdHex = await window.ethereum.request({ method: "eth_chainId" });
-      const chainId = parseInt(chainIdHex as string, 16);
-      const chain = getChainById(chainId);
-      setState((prev) => ({
-        ...prev,
-        chainId,
-        chainName: chain?.name || `Chain ${chainId}`,
-      }));
-    } catch (e) {
-      console.error("Failed to get chain:", e);
+      const balHex = (await window.ethereum.request({
+        method: "eth_getBalance",
+        params: [addr, "latest"],
+      })) as string;
+      const bal = Number(BigInt(balHex)) / 1e18;
+      setBalance(bal.toFixed(4));
+    } catch {
+      setBalance("0.0000");
     }
   }, []);
 
   const connect = useCallback(async () => {
     if (!window.ethereum) {
-      throw new Error("No wallet detected. Install MetaMask.");
+      alert("Please install MetaMask!");
+      return;
     }
-    const accounts = (await window.ethereum.request({
-      method: "eth_requestAccounts",
-    })) as string[];
-    const address = accounts[0];
-    const chainIdHex = await window.ethereum.request({ method: "eth_chainId" });
-    const chainId = parseInt(chainIdHex as string, 16);
-    const chain = getChainById(chainId);
-    
-    setState({
-      connected: true,
-      address,
-      chainId,
-      balance: null,
-      chainName: chain?.name || `Chain ${chainId}`,
-    });
-
-    await updateBalance(address);
-    return { address, chainId };
+    try {
+      const accounts = (await window.ethereum.request({
+        method: "eth_requestAccounts",
+      })) as string[];
+      const chainHex = (await window.ethereum.request({
+        method: "eth_chainId",
+      })) as string;
+      setAddress(accounts[0]);
+      setChainId(parseInt(chainHex, 16));
+      setConnected(true);
+      await updateBalance(accounts[0]);
+    } catch (err) {
+      console.error("Failed to connect:", err);
+    }
   }, [updateBalance]);
 
   const disconnect = useCallback(() => {
-    setState({
-      connected: false,
-      address: null,
-      chainId: null,
-      balance: null,
-      chainName: null,
-    });
+    setConnected(false);
+    setAddress("");
+    setChainId(0);
+    setBalance("0.0000");
   }, []);
 
-  const switchChain = useCallback(async (chainId: number) => {
-    if (!window.ethereum) throw new Error("No wallet");
+  const switchChain = useCallback(async (targetChainId: number) => {
+    if (!window.ethereum) return;
     try {
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: `0x${chainId.toString(16)}` }],
+        params: [{ chainId: "0x" + targetChainId.toString(16) }],
       });
-    } catch (error: any) {
-      if (error.code === 4902) {
-        const chain = getChainById(chainId);
-        if (!chain) throw new Error(`Unknown chain ${chainId}`);
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [{
-            chainId: `0x${chainId.toString(16)}`,
-            chainName: chain.name,
-            rpcUrls: [chain.rpcUrl],
-            nativeCurrency: chain.nativeCurrency,
-            blockExplorerUrls: [chain.explorerUrl],
-          }],
-        });
-      } else {
-        throw error;
-      }
+    } catch (err) {
+      console.error("Failed to switch chain:", err);
     }
   }, []);
 
-  // Listen for account and chain changes
   useEffect(() => {
-    if (!window.ethereum) return;
+    if (typeof window === "undefined" || !window.ethereum) return;
 
     const handleAccountsChanged = (accounts: string[]) => {
       if (accounts.length === 0) {
         disconnect();
       } else {
-        setState((prev) => ({ ...prev, address: accounts[0] }));
+        setAddress(accounts[0]);
+        setConnected(true);
         updateBalance(accounts[0]);
       }
     };
 
-    const handleChainChanged = () => {
-      updateChain();
-      if (state.address) updateBalance(state.address);
+    const handleChainChanged = (chainHex: string) => {
+      const newId = parseInt(chainHex, 16);
+      setChainId(newId);
+      if (address) updateBalance(address);
     };
 
     window.ethereum.on("accountsChanged", handleAccountsChanged);
     window.ethereum.on("chainChanged", handleChainChanged);
 
-    return () => {
-      window.ethereum?.removeListener("accountsChanged", handleAccountsChanged);
-      window.ethereum?.removeListener("chainChanged", handleChainChanged);
-    };
-  }, [state.address, disconnect, updateBalance, updateChain]);
-
-  // Check if already connected on mount
-  useEffect(() => {
-    if (!window.ethereum) return;
+    // Auto-reconnect if already connected
     window.ethereum
       .request({ method: "eth_accounts" })
-      .then((accounts: any) => {
-        if ((accounts as string[]).length > 0) {
-          connect();
+      .then((accounts: unknown) => {
+        const accts = accounts as string[];
+        if (accts.length > 0) {
+          setAddress(accts[0]);
+          setConnected(true);
+          window.ethereum!
+            .request({ method: "eth_chainId" })
+            .then((hex: unknown) => {
+              setChainId(parseInt(hex as string, 16));
+              updateBalance(accts[0]);
+            });
         }
-      })
-      .catch(console.error);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+      });
+
+    return () => {
+      window.ethereum?.removeListener(
+        "accountsChanged",
+        handleAccountsChanged
+      );
+      window.ethereum?.removeListener("chainChanged", handleChainChanged);
+    };
+  }, [address, disconnect, updateBalance]);
 
   return {
-    ...state,
+    connected,
+    address,
+    chainId,
+    chainName: getChainName(chainId),
+    balance,
     connect,
     disconnect,
     switchChain,
-    refreshBalance: () => state.address && updateBalance(state.address),
   };
 }

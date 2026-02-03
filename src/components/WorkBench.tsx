@@ -1,16 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { InteractableContractForm } from "@/lib/tambo";
 
-const TABS = [
-  { id: "deploy", label: "Deploy" },
-  { id: "verify", label: "Verify" },
-  { id: "interact", label: "Interact" },
-  { id: "history", label: "History" },
-] as const;
+const TABS = ["Deploy", "Verify", "Interact", "History"] as const;
+type Tab = (typeof TABS)[number];
 
 export default function Workbench() {
-  const [activeTab, setActiveTab] = useState<string>("deploy");
+  const [activeTab, setActiveTab] = useState<Tab>("Deploy");
 
   return (
     <div className="flex flex-col h-full bg-[#0D0D0F]">
@@ -18,16 +15,16 @@ export default function Workbench() {
       <div className="flex border-b border-[#2A2A35]">
         {TABS.map((tab) => (
           <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-3 text-sm font-medium transition-colors relative ${
-              activeTab === tab.id
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-5 py-3 text-sm font-medium transition-all relative ${
+              activeTab === tab
                 ? "text-[#00F0FF]"
-                : "text-[#8E8E9A] hover:text-[#E8E8E8]"
+                : "text-[#6B6B80] hover:text-[#E8E8E8]"
             }`}
           >
-            {tab.label}
-            {activeTab === tab.id && (
+            {tab}
+            {activeTab === tab && (
               <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00F0FF]" />
             )}
           </button>
@@ -35,26 +32,42 @@ export default function Workbench() {
       </div>
 
       {/* Tab Content */}
-      <div className="flex-1 p-4 overflow-y-auto">
-        {activeTab === "deploy" && (
-          <div className="text-[#8E8E9A] text-sm">
-            <p className="mb-2">Contract configuration will appear here.</p>
-            <p>Try saying: &quot;I want to deploy an ERC-20 token&quot;</p>
+      <div className="flex-1 overflow-y-auto p-5">
+        {activeTab === "Deploy" && (
+          <InteractableContractForm
+            contractType="ERC20"
+            name=""
+            symbol=""
+            initialSupply="1000000"
+            features={[]}
+            chain="baseSepolia"
+            onPropsUpdate={(newProps) => {
+              console.log("Contract form updated by AI:", newProps);
+            }}
+          />
+        )}
+        {activeTab === "Verify" && (
+          <div className="text-[#6B6B80] text-sm">
+            <p>Contract verification will appear here.</p>
+            <p className="mt-1 text-xs">
+              Try: &quot;Verify my contract on Etherscan&quot;
+            </p>
           </div>
         )}
-        {activeTab === "verify" && (
-          <div className="text-[#8E8E9A] text-sm">
-            Contract verification panel — coming Day 5
+        {activeTab === "Interact" && (
+          <div className="text-[#6B6B80] text-sm">
+            <p>Contract interaction panel will appear here.</p>
+            <p className="mt-1 text-xs">
+              Try: &quot;Call the totalSupply function&quot;
+            </p>
           </div>
         )}
-        {activeTab === "interact" && (
-          <div className="text-[#8E8E9A] text-sm">
-            Post-deploy interaction panel — coming Day 6
-          </div>
-        )}
-        {activeTab === "history" && (
-          <div className="text-[#8E8E9A] text-sm">
-            Deployment history — coming Day 4
+        {activeTab === "History" && (
+          <div className="text-[#6B6B80] text-sm">
+            <p>Deployment history will appear here.</p>
+            <p className="mt-1 text-xs">
+              All your past deployments across chains.
+            </p>
           </div>
         )}
       </div>
