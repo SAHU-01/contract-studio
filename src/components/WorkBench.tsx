@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { InteractableContractForm } from "@/lib/tambo";
+import InteractTab from "@/components/tabs/InteractTab";
+import HistoryTab from "@/components/tabs/HistoryTab";
 
 const TABS = ["Deploy", "Verify", "Interact", "History"] as const;
 type Tab = (typeof TABS)[number];
@@ -54,22 +56,8 @@ export default function Workbench() {
             </p>
           </div>
         )}
-        {activeTab === "Interact" && (
-          <div className="text-[#6B6B80] text-sm">
-            <p>Contract interaction panel will appear here.</p>
-            <p className="mt-1 text-xs">
-              Try: &quot;Call the totalSupply function&quot;
-            </p>
-          </div>
-        )}
-        {activeTab === "History" && (
-          <div className="text-[#6B6B80] text-sm">
-            <p>Deployment history will appear here.</p>
-            <p className="mt-1 text-xs">
-              All your past deployments across chains.
-            </p>
-          </div>
-        )}
+        {activeTab === "Interact" && <InteractTab />}
+        {activeTab === "History" && <HistoryTab />}
       </div>
     </div>
   );

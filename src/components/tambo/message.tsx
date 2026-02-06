@@ -467,7 +467,7 @@ const ToolcallInfo = React.forwardRef<HTMLDivElement, ToolcallInfoProps>(
       <div
         ref={ref}
         className={cn(
-          "flex flex-col items-start text-xs opacity-50",
+          "flex flex-col items-start text-xs opacity-80 break-all",
           className,
         )}
         data-slot="toolcall-info"
@@ -669,7 +669,7 @@ const ReasoningInfo = React.forwardRef<HTMLDivElement, ReasoningInfoProps>(
       <div
         ref={ref}
         className={cn(
-          "flex flex-col items-start text-xs opacity-50",
+          "flex flex-col items-start text-xs opacity-80",
           className,
         )}
         data-slot="reasoning-info"

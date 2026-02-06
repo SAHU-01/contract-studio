@@ -1,5 +1,4 @@
 "use client";
-
 import "./globals.css";
 import { TamboProvider } from "@tambo-ai/react";
 import { components, tools } from "@/lib/tambo";
