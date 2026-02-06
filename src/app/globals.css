@@ -1,10 +1,19 @@
 @import "tailwindcss";
 
+/* ============================================================
+   CONTRACT STUDIO — Clean Dark Theme
+   
+   Strategy: Tambo components use Tailwind CSS variables 
+   (--background, --foreground, --card, --muted, etc.)
+   We set these to dark values so ALL Tambo components
+   automatically render dark. No !important overrides needed.
+   ============================================================ */
+
 :root {
   --bg-primary: #0D0D0F;
   --bg-secondary: #141418;
   --bg-tertiary: #1A1A20;
-  --border: #2A2A35;
+  --border-color: #2A2A35;
   --text-primary: #E8E8E8;
   --text-secondary: #8E8E9A;
   --accent-cyan: #00F0FF;
@@ -13,15 +22,9 @@
   --accent-amber: #FFB800;
 }
 
-body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-}
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* Tailwind CSS Variables customized with tambo colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -45,79 +48,76 @@ body {
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-
-  /* Tambo Specific Variables needed for tambo components */
   --color-container: var(--container);
   --color-backdrop: var(--backdrop);
   --color-muted-backdrop: var(--muted-backdrop);
 }
 
+/* ============================================================
+   THE FIX: Set :root to DARK values directly.
+   Tambo reads these. No .dark class toggle needed.
+   ============================================================ */
 :root {
-  /* Default Tailwind CSS Variables customized with tambo colors */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.14 0 285);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.14 0 285);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.14 0 285);
-  --primary: oklch(0.31 0.02 281);
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.54 0.027 261);
-  --secondary-foreground: oklch(1 0 0);
-  --muted: oklch(0.92 0 260);
-  --muted-foreground: oklch(0.73 0.022 260);
-  --accent: oklch(0.97 0 286);
-  --accent-foreground: oklch(0.21 0 286);
-  --destructive: oklch(0.64 0.2 25);
-  --border: oklch(0.93 0 242);
-  --input: oklch(0.92 0 286);
-  --ring: oklch(0.14 0 285);
-  --chart-1: oklch(0.72 0.15 60);
-  --chart-2: oklch(0.62 0.2 6);
-  --chart-3: oklch(0.53 0.2 262);
-  --chart-4: oklch(0.7 0.13 165);
-  --chart-5: oklch(0.62 0.2 313);
-
-  /* Tambo Specific Variables needed for tambo components */
-  --container: oklch(0.98 0 247);
-  --backdrop: oklch(0.25 0.07 252 / 0.25);
-  --muted-backdrop: oklch(0.25 0.07 252 / 0.1);
+  --background: #0D0D0F;
+  --foreground: #E8E8E8;
+  --card: #141418;
+  --card-foreground: #E8E8E8;
+  --popover: #141418;
+  --popover-foreground: #E8E8E8;
+  --primary: #00F0FF;
+  --primary-foreground: #0D0D0F;
+  --secondary: #1A1A20;
+  --secondary-foreground: #E8E8E8;
+  --muted: #1A1A20;
+  --muted-foreground: #9898A6;
+  --accent: #1A1A20;
+  --accent-foreground: #E8E8E8;
+  --destructive: #FF4444;
+  --border: #2A2A35;
+  --input: #1A1A20;
+  --ring: #00F0FF;
+  --chart-1: #00F0FF;
+  --chart-2: #00FF88;
+  --chart-3: #FFB800;
+  --chart-4: #FF4444;
+  --chart-5: #A855F7;
+  --container: #141418;
+  --backdrop: rgba(0, 0, 0, 0.5);
+  --muted-backdrop: rgba(0, 0, 0, 0.25);
   --radius: 0.5rem;
   --panel-left-width: 500px;
   --panel-right-width: 500px;
   --sidebar-width: 3rem;
 }
 
+/* Mirror for .dark class in case Tambo toggles it */
 .dark {
-  /* Dark Mode Tailwind CSS Variables customized with tambo colors */
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.72 0.15 60);
-  --chart-2: oklch(0.62 0.2 6);
-  --chart-3: oklch(0.53 0.2 262);
-  --chart-4: oklch(0.7 0.13 165);
-  --chart-5: oklch(0.62 0.2 313);
-
-  /* Tambo Specific Variables needed for tambo components */
-  --container: oklch(0.98 0 247);
-  --backdrop: oklch(0.25 0.07 252 / 0.25);
-  --muted-backdrop: oklch(0.25 0.07 252 / 0.1);
+  --background: #0D0D0F;
+  --foreground: #E8E8E8;
+  --card: #141418;
+  --card-foreground: #E8E8E8;
+  --popover: #141418;
+  --popover-foreground: #E8E8E8;
+  --primary: #00F0FF;
+  --primary-foreground: #0D0D0F;
+  --secondary: #1A1A20;
+  --secondary-foreground: #E8E8E8;
+  --muted: #1A1A20;
+  --muted-foreground: #9898A6;
+  --accent: #1A1A20;
+  --accent-foreground: #E8E8E8;
+  --destructive: #FF4444;
+  --border: #2A2A35;
+  --input: #1A1A20;
+  --ring: #00F0FF;
+  --chart-1: #00F0FF;
+  --chart-2: #00FF88;
+  --chart-3: #FFB800;
+  --chart-4: #FF4444;
+  --chart-5: #A855F7;
+  --container: #141418;
+  --backdrop: rgba(0, 0, 0, 0.5);
+  --muted-backdrop: rgba(0, 0, 0, 0.25);
   --radius: 0.5rem;
   --panel-left-width: 500px;
   --panel-right-width: 500px;
@@ -130,52 +130,27 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 }
 
-/*
-This is a custom animation for the interactable components.
-It's used to highlight the fields that have been updated.
-You can remove this if you don't want to use it.
-*/
-
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
 @keyframes flash {
-  0%,
-  100% {
-    background-color: transparent;
-  }
-  50% {
-    background-color: rgb(59 130 246 / 0.3);
-  }
+  0%, 100% { background-color: transparent; }
+  50% { background-color: rgba(0, 240, 255, 0.15); }
 }
-
 .animate-flash {
   animation: flash 1s ease-in-out;
 }
 
-/*
-Animated gradient for thinking text, creates a shimmering effect that moves across the text.
-*/
 @keyframes thinking-gradient {
-  0% {
-    background-position: -200% center;
-  }
-  100% {
-    background-position: 200% center;
-  }
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
 }
-
 .animate-thinking-gradient {
-  /* Fallback */
-  background: linear-gradient(90deg, #666 0%, #bbb 50%, #666 100%);
-  /* Preferred (overrides when supported) */
-  background: linear-gradient(
-    90deg,
-    oklch(0.14 0 0) 0%,
-    oklch(0.7 0 0) 50%,
-    oklch(0.14 0 0) 100%
-  );
+  background: linear-gradient(90deg, #3A3A45 0%, #9898A6 50%, #3A3A45 100%);
   background-size: 200% 100%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -183,1031 +158,90 @@ Animated gradient for thinking text, creates a shimmering effect that moves acro
   animation: thinking-gradient 2s linear infinite;
 }
 
-/* Fix grey text visibility */
-.text-muted-foreground {
-  color: #A0A0B0 !important;
-}
-.opacity-80 {
-  opacity: 0.95 !important;
-}
-.opacity-50 {
-  opacity: 0.75 !important;
-}
-
-/* Fix grey card text - make it much lighter */
-.text-\[\#6B6B80\] {
-  color: #B0B0C0 !important;
-}
-.text-\[\#8B8BA0\] {
-  color: #C0C0D0 !important;
-}
-
-/* Fix thinking/status card text */
-[class*="bg-[#"] .text-\[\#6B6B80\],
-[class*="bg-[#"] .text-\[\#8B8BA0\] {
-  color: #D0D0E0 !important;
-}
-
-/* Fix thinking/reasoning block text */
-.bg-muted\/50,
-.bg-muted {
-  color: #E0E0E8 !important;
-}
-
-/* Ensure all text in dark cards is readable */
-[class*="bg-[#1"] p,
-[class*="bg-[#1"] span,
-[class*="bg-[#1"] div {
-  color: inherit;
-}
-
-/* Make muted-foreground much brighter */
-.text-muted-foreground {
-  color: #B8B8C8 !important;
-}
-
-/* FORCE black text in thinking/reasoning blocks */
-.bg-muted\/50 *,
-.bg-muted *,
-[class*="bg-muted"] * {
-  color: #000000 !important;
-}
-
-/* Also fix the grey result boxes */
-.bg-muted\/50,
-.bg-muted,
-[class*="bg-muted"] {
-  background-color: #E8E8F0 !important;
-  color: #000000 !important;
-}
-
-/* GLOBAL FIX: Make ALL chat text bright white/readable */
-[data-slot="message-content"],
-[data-slot="message-content"] *,
-.prose,
-.prose *,
-[class*="thread"] p,
-[class*="thread"] span,
-[class*="thread"] li,
-[class*="thread"] div,
-[class*="message"] p,
-[class*="message"] span,
-[class*="message"] li {
-  color: #F0F0F5 !important;
-}
-
-/* Keep colored elements their colors */
-.text-cyan-400, a.text-cyan-400 { color: #22d3ee !important; }
-.text-green-400, .text-green-500 { color: #4ade80 !important; }
-.text-red-400, .text-red-500 { color: #f87171 !important; }
-.text-amber-400 { color: #fbbf24 !important; }
-.text-blue-400 { color: #60a5fa !important; }
-
-/* Headings even brighter */
-h1, h2, h3, h4, h5, h6,
-strong, b {
-  color: #FFFFFF !important;
-}
-
-/* Code blocks */
-code, pre {
-  color: #E8E8E8 !important;
-}
-
-/* User messages stay bright */
-[data-message-role="user"] {
-  color: #FFFFFF !important;
-}
-
-/* SUGGESTIONS at bottom - make BLACK */
-[class*="suggestion"] button,
-[class*="suggestion"] span,
-[class*="suggestion"] p,
-button[class*="bg-white"],
-button[class*="bg-gray"],
-[class*="Suggestion"] {
-  color: #000000 !important;
-}
-
-/* Input placeholder text - make visible */
-textarea::placeholder,
-input::placeholder {
-  color: #808090 !important;
-}
-
-/* Chat input text while typing */
-textarea,
-input[type="text"] {
-  color: #FFFFFF !important;
-}
-
-/* Thinking/reasoning blocks - BLACK text on light bg */
-[class*="animate-thinking"],
-[class*="thinking"],
-[class*="Thought"],
-.whitespace-pre-wrap {
-  color: #000000 !important;
-}
-
-/* Any light grey background should have black text */
-[class*="bg-gray"],
-[class*="bg-white"],
-[class*="bg-slate"],
-[class*="bg-neutral"] {
-  color: #000000 !important;
-}
-[class*="bg-gray"] *,
-[class*="bg-white"] *,
-[class*="bg-slate"] *,
-[class*="bg-neutral"] * {
-  color: #000000 !important;
-}
-
 /* ============================================================
-   CONTRACT STUDIO — Chat Section Dark Theme Fix
-   Add this to your globals.css (or import it)
-   Theme: #0D0D0F bg, #00F0FF cyan accent, #2A2A35 borders
+   TARGETED FIXES — Only where CSS vars don't fully reach
    ============================================================ */
 
-/* -------------------------------------------------------
-   CSS VARIABLES — Override Tambo's defaults
-   ------------------------------------------------------- */
-:root {
-  --cs-bg-deep: #0D0D0F;
-  --cs-bg-panel: #111115;
-  --cs-bg-surface: #16161B;
-  --cs-bg-elevated: #1C1C23;
-  --cs-bg-hover: #22222B;
-  --cs-bg-active: #1A2A2E;
-  --cs-border: #2A2A35;
-  --cs-border-subtle: #1F1F28;
-  --cs-text-primary: #E8E8E8;
-  --cs-text-secondary: #9898A6;
-  --cs-text-muted: #5E5E6E;
-  --cs-accent: #00F0FF;
-  --cs-accent-dim: rgba(0, 240, 255, 0.15);
-  --cs-accent-glow: rgba(0, 240, 255, 0.08);
-  --cs-user-bubble: #1A1A22;
-  --cs-ai-bubble: transparent;
-  --cs-input-bg: #111115;
-  --cs-input-border: #2A2A35;
-  --cs-input-focus: #00F0FF;
-  --cs-scrollbar-thumb: #2A2A35;
-  --cs-scrollbar-hover: #3A3A45;
-  --cs-danger: #FF4D6A;
-  --cs-success: #00D68F;
-  --cs-warning: #FFB547;
-}
-
-/* -------------------------------------------------------
-   THREAD HISTORY SIDEBAR (Left Panel)
-   ------------------------------------------------------- */
-
-/* Sidebar container */
-[data-testid="thread-history"],
-.thread-history,
-div[class*="ThreadHistory"],
-aside[class*="thread-history"],
-nav[class*="thread-history"] {
-  background: var(--cs-bg-deep) !important;
-  border-right: 1px solid var(--cs-border) !important;
-  color: var(--cs-text-primary) !important;
-}
-
-/* "Tambo Conversations" header */
-[data-testid="thread-history-header"],
-.thread-history-header,
-div[class*="ThreadHistoryHeader"],
-div[class*="thread-history"] > div:first-child,
-div[class*="HistoryHeader"] {
-  background: var(--cs-bg-deep) !important;
-  color: var(--cs-text-secondary) !important;
-  border-bottom: 1px solid var(--cs-border-subtle) !important;
-  padding: 16px !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-}
-
-/* New thread button */
-[data-testid="thread-history-new"],
-button[class*="NewButton"],
-button[class*="new-thread"],
-div[class*="thread-history"] button:first-of-type {
-  background: var(--cs-bg-surface) !important;
-  color: var(--cs-accent) !important;
-  border: 1px solid var(--cs-border) !important;
-  border-radius: 8px !important;
-  margin: 8px 12px !important;
-  padding: 10px 14px !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  transition: all 0.2s ease !important;
-}
-
-[data-testid="thread-history-new"]:hover,
-button[class*="NewButton"]:hover,
-button[class*="new-thread"]:hover {
-  background: var(--cs-bg-elevated) !important;
-  border-color: var(--cs-accent) !important;
-  box-shadow: 0 0 12px var(--cs-accent-glow) !important;
-}
-
-/* "+" icon in new thread */
-[data-testid="thread-history-new"] svg,
-button[class*="new-thread"] svg {
-  color: var(--cs-accent) !important;
-  width: 16px !important;
-  height: 16px !important;
-}
-
-/* Search input in sidebar */
-[data-testid="thread-history-search"] input,
-div[class*="thread-history"] input[type="text"],
-div[class*="thread-history"] input[type="search"],
-input[placeholder*="Search"] {
-  background: var(--cs-bg-surface) !important;
-  border: 1px solid var(--cs-border) !important;
-  border-radius: 8px !important;
-  color: var(--cs-text-primary) !important;
-  padding: 8px 12px !important;
-  font-size: 13px !important;
-  margin: 4px 12px 8px !important;
-  width: calc(100% - 24px) !important;
-}
-
-[data-testid="thread-history-search"] input::placeholder,
-div[class*="thread-history"] input::placeholder {
-  color: var(--cs-text-muted) !important;
-}
-
-[data-testid="thread-history-search"] input:focus,
-div[class*="thread-history"] input:focus {
-  border-color: var(--cs-accent) !important;
-  outline: none !important;
-  box-shadow: 0 0 0 2px var(--cs-accent-dim) !important;
-}
-
-/* Thread list container */
-[data-testid="thread-history-list"],
-div[class*="ThreadHistoryList"],
-div[class*="thread-history"] ul,
-div[class*="thread-history"] > div:last-child {
-  background: var(--cs-bg-deep) !important;
-  padding: 4px 0 !important;
-  overflow-y: auto !important;
-}
-
-/* Individual thread items */
-[data-testid="thread-history-list"] > *,
-div[class*="thread-history"] li,
-div[class*="thread-history"] a,
-div[class*="thread-history"] button[class*="item"],
-div[class*="ThreadHistoryList"] > div,
-div[class*="ThreadHistoryList"] > button,
-div[class*="ThreadHistoryList"] > a {
-  background: transparent !important;
-  color: var(--cs-text-secondary) !important;
-  border: none !important;
-  border-left: 2px solid transparent !important;
-  padding: 10px 16px !important;
-  margin: 1px 0 !important;
-  font-size: 13px !important;
-  line-height: 1.4 !important;
-  cursor: pointer !important;
-  transition: all 0.15s ease !important;
-  display: block !important;
-  text-decoration: none !important;
-  border-radius: 0 !important;
-}
-
-[data-testid="thread-history-list"] > *:hover,
-div[class*="thread-history"] li:hover,
-div[class*="thread-history"] a:hover,
-div[class*="ThreadHistoryList"] > div:hover,
-div[class*="ThreadHistoryList"] > button:hover,
-div[class*="ThreadHistoryList"] > a:hover {
-  background: var(--cs-bg-hover) !important;
-  color: var(--cs-text-primary) !important;
-  border-left-color: var(--cs-accent) !important;
-}
-
-/* Active/selected thread */
-[data-testid="thread-history-list"] > *[aria-selected="true"],
-[data-testid="thread-history-list"] > *.active,
-div[class*="thread-history"] li.active,
-div[class*="thread-history"] a[aria-current],
-div[class*="ThreadHistoryList"] > *[data-active="true"],
-div[class*="ThreadHistoryList"] > *.active {
-  background: var(--cs-bg-active) !important;
-  color: var(--cs-accent) !important;
-  border-left-color: var(--cs-accent) !important;
-}
-
-/* Thread item timestamps */
-[data-testid="thread-history-list"] time,
-[data-testid="thread-history-list"] span[class*="date"],
-[data-testid="thread-history-list"] span[class*="time"],
-div[class*="thread-history"] time,
-div[class*="ThreadHistoryList"] time,
-div[class*="ThreadHistoryList"] span[class*="date"] {
-  color: var(--cs-text-muted) !important;
-  font-size: 11px !important;
-}
-
-/* -------------------------------------------------------
-   MAIN CHAT AREA
-   ------------------------------------------------------- */
-
-/* Chat panel wrapper */
-div[class*="MessageThreadFull"],
-div[class*="message-thread-full"],
-div[class*="thread-container"] {
-  background: var(--cs-bg-deep) !important;
-  color: var(--cs-text-primary) !important;
-}
-
-/* Scrollable message area */
-div[class*="ScrollableMessageContainer"],
-div[class*="scrollable-message"],
-div[class*="ThreadContent"],
-div[class*="thread-content"] {
-  background: var(--cs-bg-deep) !important;
-}
-
-/* -------------------------------------------------------
-   MESSAGE BUBBLES
-   ------------------------------------------------------- */
-
-/* User messages */
-div[class*="message"][data-role="user"],
-div[data-role="user"],
-div[class*="Message"][data-role="user"] {
-  background: var(--cs-user-bubble) !important;
-  color: var(--cs-text-primary) !important;
-  border: 1px solid var(--cs-border-subtle) !important;
-  border-radius: 12px 12px 4px 12px !important;
-  padding: 12px 16px !important;
-  margin: 4px 16px 4px 48px !important;
-  max-width: 85% !important;
-  margin-left: auto !important;
-}
-
-/* AI/Assistant messages */
-div[class*="message"][data-role="assistant"],
-div[data-role="assistant"],
-div[class*="Message"][data-role="assistant"] {
-  background: var(--cs-ai-bubble) !important;
-  color: var(--cs-text-primary) !important;
-  border: none !important;
-  border-radius: 12px 12px 12px 4px !important;
-  padding: 12px 16px !important;
-  margin: 4px 48px 4px 16px !important;
-  max-width: 85% !important;
-}
-
-/* Message text content */
-div[class*="message"] p,
-div[data-role] p,
-div[class*="Message"] p {
-  color: var(--cs-text-primary) !important;
-  line-height: 1.6 !important;
-  font-size: 14px !important;
-}
-
-/* Markdown rendered inside messages */
-div[class*="message"] .streamdown,
-div[class*="message"] .markdown,
-div[class*="Message"] .streamdown {
-  color: var(--cs-text-primary) !important;
-}
-
-div[class*="message"] code,
-div[class*="Message"] code {
-  background: var(--cs-bg-elevated) !important;
-  color: var(--cs-accent) !important;
-  padding: 2px 6px !important;
-  border-radius: 4px !important;
-  font-size: 13px !important;
-}
-
-div[class*="message"] pre,
-div[class*="Message"] pre {
-  background: var(--cs-bg-surface) !important;
-  border: 1px solid var(--cs-border) !important;
-  border-radius: 8px !important;
-  padding: 12px !important;
-  overflow-x: auto !important;
-}
-
-div[class*="message"] pre code,
-div[class*="Message"] pre code {
-  background: transparent !important;
-  padding: 0 !important;
-}
-
-/* -------------------------------------------------------
-   MESSAGE INPUT AREA
-   ------------------------------------------------------- */
-
-/* Input container */
-div[class*="MessageInput"],
-div[class*="message-input"],
-form[class*="message-input"],
-div[class*="input-container"] {
-  background: var(--cs-bg-deep) !important;
-  border-top: 1px solid var(--cs-border) !important;
-  padding: 12px 16px !important;
-}
-
-/* Text input / textarea */
-div[class*="MessageInput"] textarea,
-div[class*="message-input"] textarea,
-div[class*="MessageInputTextarea"] textarea,
-textarea[class*="message-input"],
-div[class*="input"] textarea {
-  background: var(--cs-input-bg) !important;
-  border: 1px solid var(--cs-input-border) !important;
-  border-radius: 12px !important;
-  color: var(--cs-text-primary) !important;
-  padding: 12px 16px !important;
-  font-size: 14px !important;
-  line-height: 1.5 !important;
-  resize: none !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-  min-height: 44px !important;
-}
-
-div[class*="MessageInput"] textarea::placeholder,
-div[class*="message-input"] textarea::placeholder,
-textarea[class*="message-input"]::placeholder {
-  color: var(--cs-text-muted) !important;
-}
-
-div[class*="MessageInput"] textarea:focus,
-div[class*="message-input"] textarea:focus,
-textarea[class*="message-input"]:focus {
-  border-color: var(--cs-accent) !important;
-  outline: none !important;
-  box-shadow: 0 0 0 2px var(--cs-accent-dim), 0 0 20px var(--cs-accent-glow) !important;
-}
-
-/* Input toolbar (attachment, MCP buttons) */
-div[class*="MessageInputToolbar"],
-div[class*="input-toolbar"],
-div[class*="message-input"] > div:last-child {
-  background: transparent !important;
-  padding: 6px 0 0 0 !important;
-}
-
-/* Toolbar buttons (attach, MCP config, etc.) */
-div[class*="MessageInputToolbar"] button,
-div[class*="input-toolbar"] button,
-div[class*="message-input"] button[class*="file"],
-div[class*="message-input"] button[class*="mcp"],
-div[class*="message-input"] button[class*="resource"],
-div[class*="message-input"] button[class*="prompt"] {
-  background: var(--cs-bg-surface) !important;
-  color: var(--cs-text-secondary) !important;
-  border: 1px solid var(--cs-border-subtle) !important;
-  border-radius: 8px !important;
-  padding: 6px 8px !important;
-  transition: all 0.15s ease !important;
-}
-
-div[class*="MessageInputToolbar"] button:hover,
-div[class*="input-toolbar"] button:hover,
-div[class*="message-input"] button:hover {
-  background: var(--cs-bg-elevated) !important;
-  color: var(--cs-text-primary) !important;
-  border-color: var(--cs-accent) !important;
-}
-
-/* Submit/Send button */
-div[class*="MessageInputSubmitButton"] button,
-button[class*="submit"],
-button[class*="send"],
-div[class*="message-input"] button[type="submit"],
-div[class*="message-input"] button:last-of-type {
-  background: var(--cs-accent) !important;
-  color: var(--cs-bg-deep) !important;
-  border: none !important;
-  border-radius: 10px !important;
-  padding: 8px 12px !important;
-  font-weight: 600 !important;
-  transition: all 0.2s ease !important;
-}
-
-div[class*="MessageInputSubmitButton"] button:hover,
-button[class*="submit"]:hover,
-button[class*="send"]:hover {
-  background: #33F5FF !important;
-  box-shadow: 0 0 16px var(--cs-accent-dim) !important;
-  transform: translateY(-1px) !important;
-}
-
-div[class*="MessageInputSubmitButton"] button:disabled,
-button[class*="submit"]:disabled {
-  background: var(--cs-bg-elevated) !important;
-  color: var(--cs-text-muted) !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
-/* -------------------------------------------------------
-   MESSAGE INPUT ERROR
-   ------------------------------------------------------- */
-div[class*="MessageInputError"],
-div[class*="input-error"] {
-  background: rgba(255, 77, 106, 0.1) !important;
-  border: 1px solid rgba(255, 77, 106, 0.3) !important;
-  color: var(--cs-danger) !important;
-  border-radius: 8px !important;
-  padding: 8px 12px !important;
-  font-size: 13px !important;
-  margin: 4px 0 !important;
-}
-
-/* -------------------------------------------------------
-   SUGGESTIONS CHIPS
-   ------------------------------------------------------- */
-div[class*="MessageSuggestions"],
-div[class*="message-suggestions"],
-div[class*="SuggestionsList"] {
-  background: transparent !important;
-  padding: 8px 16px !important;
-  gap: 8px !important;
-  display: flex !important;
-  flex-wrap: wrap !important;
-}
-
-div[class*="MessageSuggestions"] button,
-div[class*="message-suggestions"] button,
-div[class*="SuggestionsList"] button,
-button[class*="suggestion"] {
-  background: var(--cs-bg-surface) !important;
-  color: var(--cs-text-secondary) !important;
-  border: 1px solid var(--cs-border) !important;
-  border-radius: 20px !important;
-  padding: 8px 16px !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  transition: all 0.2s ease !important;
-  white-space: nowrap !important;
-}
-
-div[class*="MessageSuggestions"] button:hover,
-div[class*="message-suggestions"] button:hover,
-button[class*="suggestion"]:hover {
-  background: var(--cs-bg-elevated) !important;
-  color: var(--cs-accent) !important;
-  border-color: var(--cs-accent) !important;
-  box-shadow: 0 0 12px var(--cs-accent-glow) !important;
-}
-
-/* Suggestion status text */
-div[class*="SuggestionsStatus"],
-div[class*="suggestions-status"] {
-  color: var(--cs-text-muted) !important;
-  font-size: 12px !important;
-}
-
-/* -------------------------------------------------------
-   LOADING / THINKING STATES
-   ------------------------------------------------------- */
-div[class*="message"] div[class*="loading"],
-div[class*="message"] div[class*="thinking"],
-div[class*="Loader"],
-.animate-spin {
-  color: var(--cs-accent) !important;
-}
-
-/* Typing indicator dots */
-@keyframes cs-pulse {
-  0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
-  40% { opacity: 1; transform: scale(1); }
-}
-
-/* -------------------------------------------------------
-   MCP TOOL CALL BLOCKS
-   ------------------------------------------------------- */
-div[class*="tool-call"],
-div[class*="ToolCall"],
-div[class*="mcp-tool"] {
-  background: var(--cs-bg-surface) !important;
-  border: 1px solid var(--cs-border) !important;
-  border-radius: 8px !important;
-  padding: 12px !important;
-  margin: 8px 0 !important;
-}
-
-div[class*="tool-call"] summary,
-div[class*="ToolCall"] summary {
-  color: var(--cs-text-secondary) !important;
-  cursor: pointer !important;
-}
-
-div[class*="tool-call"] svg,
-div[class*="ToolCall"] svg {
-  color: var(--cs-accent) !important;
-}
-
-/* Tool status indicators */
-div[class*="tool-call"] [class*="success"],
-div[class*="ToolCall"] [class*="success"] {
-  color: var(--cs-success) !important;
-}
-
-div[class*="tool-call"] [class*="error"],
-div[class*="ToolCall"] [class*="error"] {
-  color: var(--cs-danger) !important;
-}
-
-div[class*="tool-call"] [class*="pending"],
-div[class*="ToolCall"] [class*="pending"] {
-  color: var(--cs-warning) !important;
-}
-
-/* -------------------------------------------------------
-   SCROLLBAR STYLING
-   ------------------------------------------------------- */
-div[class*="thread-history"] ::-webkit-scrollbar,
-div[class*="ThreadHistory"] ::-webkit-scrollbar,
-div[class*="ScrollableMessageContainer"] ::-webkit-scrollbar,
-div[class*="scrollable-message"] ::-webkit-scrollbar,
-div[class*="thread-content"] ::-webkit-scrollbar {
-  width: 6px !important;
-}
-
-div[class*="thread-history"] ::-webkit-scrollbar-track,
-div[class*="ThreadHistory"] ::-webkit-scrollbar-track,
-div[class*="ScrollableMessageContainer"] ::-webkit-scrollbar-track,
-div[class*="thread-content"] ::-webkit-scrollbar-track {
-  background: transparent !important;
-}
-
-div[class*="thread-history"] ::-webkit-scrollbar-thumb,
-div[class*="ThreadHistory"] ::-webkit-scrollbar-thumb,
-div[class*="ScrollableMessageContainer"] ::-webkit-scrollbar-thumb,
-div[class*="thread-content"] ::-webkit-scrollbar-thumb {
-  background: var(--cs-scrollbar-thumb) !important;
-  border-radius: 3px !important;
-}
-
-div[class*="thread-history"] ::-webkit-scrollbar-thumb:hover,
-div[class*="ThreadHistory"] ::-webkit-scrollbar-thumb:hover,
-div[class*="ScrollableMessageContainer"] ::-webkit-scrollbar-thumb:hover,
-div[class*="thread-content"] ::-webkit-scrollbar-thumb:hover {
-  background: var(--cs-scrollbar-hover) !important;
-}
-
-/* -------------------------------------------------------
-   GLOBAL OVERRIDES — Catch-all for Tambo components
-   ------------------------------------------------------- */
-
-/* Force all text in the chat panel to be light */
-.w-\[40\%\] *,
-div[class*="chat-panel"] * {
-  scrollbar-color: var(--cs-scrollbar-thumb) transparent;
-}
-
-/* Any white/light backgrounds that leaked through */
-.w-\[40\%\] div[class*="bg-white"],
-.w-\[40\%\] div[class*="bg-gray"],
-.w-\[40\%\] [class*="bg-slate"],
-div[class*="chat-panel"] div[class*="bg-white"],
-div[class*="chat-panel"] div[class*="bg-gray"] {
-  background: var(--cs-bg-deep) !important;
-}
-
-/* Fix any default light borders */
-.w-\[40\%\] [class*="border-gray"],
-.w-\[40\%\] [class*="border-slate"],
-div[class*="chat-panel"] [class*="border-gray"] {
-  border-color: var(--cs-border) !important;
-}
-
-/* -------------------------------------------------------
-   BOTTOM HELPER BUTTONS (Get started, Learn more, Examples)
-   ------------------------------------------------------- */
-div[class*="message-thread"] button[class*="helper"],
-div[class*="MessageThread"] a[class*="helper"],
-button:has(> span:is(:empty)) + button,
-.w-\[40\%\] > div > div:last-child > div:last-child button,
-.w-\[40\%\] a[class*="link"],
-.w-\[40\%\] button[class*="ghost"] {
-  background: transparent !important;
-  color: var(--cs-text-muted) !important;
-  border: 1px solid var(--cs-border-subtle) !important;
-  border-radius: 16px !important;
-  padding: 4px 12px !important;
-  font-size: 12px !important;
-  transition: all 0.15s ease !important;
-}
-
-/* -------------------------------------------------------
-   RESPONSIVE — Collapse sidebar on smaller screens
-   ------------------------------------------------------- */
-@media (max-width: 768px) {
-  div[class*="ThreadHistory"],
-  div[class*="thread-history"] {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    width: 260px !important;
-    z-index: 50 !important;
-    transform: translateX(-100%) !important;
-    transition: transform 0.25s ease !important;
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5) !important;
-  }
-
-  div[class*="ThreadHistory"][data-open="true"],
-  div[class*="thread-history"].open {
-    transform: translateX(0) !important;
-  }
-}
-
-/* -------------------------------------------------------
-   N AVATAR (bottom-left)
-   ------------------------------------------------------- */
-div[class*="avatar"],
-.w-\[40\%\] img[class*="avatar"],
-.w-\[40\%\] div[class*="Avatar"] {
-  border: 2px solid var(--cs-border) !important;
-  background: var(--cs-bg-elevated) !important;
-}
-
-/* -------------------------------------------------------
-   ANIMATIONS — Subtle message entry
-   ------------------------------------------------------- */
-@keyframes cs-fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-div[data-role="user"],
-div[data-role="assistant"] {
-  animation: cs-fadeInUp 0.25s ease-out !important;
-}
-/* ============================================================
-   CONTRACT STUDIO — Tailwind @layer Overrides
-   
-   PASTE THIS AT THE END OF YOUR globals.css 
-   (after @tailwind base/components/utilities)
-   
-   This targets the Tambo scaffold's actual DOM structure.
-   ============================================================ */
-
-@layer components {
-  /* ---- THREAD HISTORY SIDEBAR ---- */
-  
-  /* The sidebar panel itself — Tambo wraps this in a flex container */
-  .thread-history-panel,
-  [class*="ThreadHistory"] {
-    @apply bg-[#0D0D0F] text-[#9898A6];
-  }
-
-  /* Thread list items — these render as buttons or divs */
-  [class*="ThreadHistoryList"] > * {
-    @apply bg-transparent text-[#9898A6] border-l-2 border-l-transparent
-           hover:bg-[#22222B] hover:text-[#E8E8E8] hover:border-l-[#00F0FF]
-           transition-all duration-150 px-4 py-2.5 text-[13px];
-  }
-
-  /* Active thread item */
-  [class*="ThreadHistoryList"] > *[data-active="true"],
-  [class*="ThreadHistoryList"] > *.active {
-    @apply bg-[#1A2A2E] text-[#00F0FF] border-l-[#00F0FF];
-  }
-}
-
-@layer utilities {
-  /* Force dark background on everything in chat panel */
-  .chat-dark-override,
-  .chat-dark-override * {
-    --tw-bg-opacity: 1;
-  }
-}
-
-/* ============================================================
-   RAW CSS OVERRIDES (no Tailwind needed — works everywhere)
-   These are the critical fixes for the broken styling.
-   ============================================================ */
-
-/* ---------- FIX 1: Sidebar text visibility ---------- */
-
-/* The sidebar thread list items are nearly invisible because 
-   Tambo defaults to light theme colors. Force dark theme. */
-aside,
-nav,
-[role="navigation"],
-div:has(> [class*="ThreadHistoryList"]),
-div:has(> [class*="ThreadHistoryNewButton"]),
-div:has(> [class*="ThreadHistorySearch"]) {
-  background-color: #0D0D0F !important;
-}
-
-/* All text inside the sidebar */
-div:has(> [class*="ThreadHistoryList"]) *,
-[class*="ThreadHistory"] * {
-  color: #9898A6 !important;
-}
-
-/* But make hovered items brighter */
-[class*="ThreadHistoryList"] > *:hover,
-[class*="ThreadHistoryList"] > *:hover * {
-  color: #E8E8E8 !important;
-}
-
-/* Active thread - cyan highlight */
-[class*="ThreadHistoryList"] > *[data-active],
-[class*="ThreadHistoryList"] > *.active,
-[class*="ThreadHistoryList"] > *[data-active] *,
-[class*="ThreadHistoryList"] > *.active * {
-  color: #00F0FF !important;
-}
-
-/* ---------- FIX 2: Chat input area (the white box) ---------- */
-
-/* The input area at the bottom has a white/light background.
-   This catches it with multiple selectors. */
-   
-/* Target the outer wrapper of the input */
-div:has(> textarea),
-div:has(> [class*="MessageInputTextarea"]),
-form:has(textarea) {
-  background-color: #0D0D0F !important;
-}
-
-/* The textarea itself */
+/* --- Textarea / Chat Input --- */
 textarea {
-  background-color: #111115 !important;
-  border-color: #2A2A35 !important;
-  color: #E8E8E8 !important;
-  caret-color: #00F0FF !important;
-  border-radius: 12px !important;
+  background-color: var(--input) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+  caret-color: var(--primary);
 }
-
-textarea::placeholder {
-  color: #5E5E6E !important;
-}
-
 textarea:focus {
-  border-color: #00F0FF !important;
-  box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.15),
-              0 0 20px rgba(0, 240, 255, 0.08) !important;
+  border-color: var(--ring) !important;
+  box-shadow: 0 0 0 2px rgba(0, 240, 255, 0.15) !important;
   outline: none !important;
 }
-
-/* ---------- FIX 3: Input toolbar buttons ---------- */
-
-/* The little attachment/paperclip buttons at the bottom */
-div:has(> textarea) ~ div button,
-div:has(> textarea) + div button,
-[class*="MessageInputToolbar"] button,
-[class*="input-toolbar"] button {
-  background-color: #16161B !important;
-  color: #9898A6 !important;
-  border: 1px solid #2A2A35 !important;
-  border-radius: 8px !important;
+textarea::placeholder {
+  color: var(--muted-foreground) !important;
 }
 
-div:has(> textarea) ~ div button:hover,
-[class*="MessageInputToolbar"] button:hover {
-  background-color: #1C1C23 !important;
-  color: #E8E8E8 !important;
-  border-color: #00F0FF !important;
+/* --- Muted/thinking blocks: LIGHT text on dark bg --- */
+.bg-muted,
+.bg-muted\/50 {
+  background-color: var(--muted) !important;
+  color: var(--foreground) !important;
+}
+.bg-muted *,
+.bg-muted\/50 * {
+  color: var(--foreground) !important;
 }
 
-/* Send button — always cyan */
-button[type="submit"],
-[class*="SubmitButton"] button,
-button[class*="send"] {
-  background-color: #00F0FF !important;
-  color: #0D0D0F !important;
-  border: none !important;
-  border-radius: 10px !important;
-  font-weight: 600 !important;
+/* --- Submit button --- */
+button[type="submit"] {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+}
+button[type="submit"]:disabled {
+  background-color: var(--secondary) !important;
+  color: var(--muted-foreground) !important;
+  opacity: 0.5;
 }
 
-button[type="submit"]:hover,
-[class*="SubmitButton"] button:hover {
-  background-color: #33F5FF !important;
-  box-shadow: 0 0 16px rgba(0, 240, 255, 0.25) !important;
+/* --- Code blocks --- */
+code {
+  background-color: var(--secondary);
+  color: #00F0FF;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+pre {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+pre code {
+  background-color: transparent;
+  color: var(--foreground);
+  padding: 0;
 }
 
-button[type="submit"]:disabled,
-[class*="SubmitButton"] button:disabled {
-  background-color: #1C1C23 !important;
-  color: #5E5E6E !important;
-  box-shadow: none !important;
-}
+/* --- Strong, headings, links --- */
+strong, b { color: #FFFFFF; }
+h1, h2, h3, h4, h5, h6 { color: #FFFFFF; }
+a { color: #00F0FF; }
+a:hover { color: #33F5FF; }
 
-/* ---------- FIX 4: Mic button icon ---------- */
-button:has(> svg[class*="mic"]),
-button[aria-label*="voice"],
-button[aria-label*="audio"] {
-  background-color: #16161B !important;
-  color: #9898A6 !important;
-  border: 1px solid #2A2A35 !important;
-}
+/* --- Scrollbars --- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3A3A45; }
 
-/* ---------- FIX 5: Messages area background ---------- */
-
-/* Ensure the entire message scroll area is dark */
-[class*="ScrollableMessageContainer"],
-[class*="scrollable-message"],
-[class*="ThreadContent"],
-[class*="thread-content"],
-main,
-[role="main"] {
-  background-color: #0D0D0F !important;
-}
-
-/* ---------- FIX 6: Get started / Learn more / Examples pills ---------- */
-
-/* Bottom helper links that have wrong colors */
-a[href*="get-started"],
-a[href*="learn"],
-a[href*="example"],
-button:has(span),
-[class*="helper-link"],
-[class*="onboarding"] button {
-  color: #5E5E6E !important;
-  border-color: #2A2A35 !important;
-  background: transparent !important;
-}
-
-/* ---------- FIX 7: Search icon in sidebar ---------- */
-[class*="ThreadHistory"] svg,
-[class*="thread-history"] svg {
-  color: #5E5E6E !important;
-}
-
-[class*="ThreadHistory"] svg:hover {
-  color: #9898A6 !important;
-}
-
-/* ---------- FIX 8: Thread container / wrapper ---------- */
-
-/* The ThreadContainer wraps everything — ensure dark bg */
-[class*="ThreadContainer"],
-[class*="thread-container"],
-[class*="MessageThreadFull"] {
-  background-color: #0D0D0F !important;
-}
-
-/* ---------- FIX 9: Any remaining white leak-throughs ---------- */
-
-/* Nuclear option for any remaining light backgrounds in the left 40% */
+/* --- Chat panel fallback --- */
 .w-\[40\%\] {
-  background-color: #0D0D0F !important;
+  background-color: var(--background);
 }
 
-.w-\[40\%\] > div {
-  background-color: #0D0D0F !important;
-}
-
-/* Also catch any Tailwind bg-white, bg-gray-50, etc. */
+/* --- Catch any Tailwind light-theme class leaks inside chat --- */
 .w-\[40\%\] .bg-white,
 .w-\[40\%\] .bg-gray-50,
-.w-\[40\%\] .bg-gray-100,
-.w-\[40\%\] .bg-slate-50,
-.w-\[40\%\] .bg-slate-100,
-.w-\[40\%\] .bg-neutral-50 {
-  background-color: #0D0D0F !important;
+.w-\[40\%\] .bg-gray-100 {
+  background-color: var(--background) !important;
 }
-
-/* Fix any remaining dark-on-dark text */
 .w-\[40\%\] .text-gray-900,
-.w-\[40\%\] .text-slate-900,
-.w-\[40\%\] .text-black,
-.w-\[40\%\] .text-neutral-900 {
-  color: #E8E8E8 !important;
-}
-
-.w-\[40\%\] .text-gray-500,
-.w-\[40\%\] .text-slate-500,
-.w-\[40\%\] .text-neutral-500 {
-  color: #9898A6 !important;
-}
-
-.w-\[40\%\] .text-gray-400,
-.w-\[40\%\] .text-slate-400,
-.w-\[40\%\] .text-neutral-400 {
-  color: #5E5E6E !important;
-}
-
-.w-\[40\%\] .border-gray-200,
-.w-\[40\%\] .border-slate-200,
-.w-\[40\%\] .border-neutral-200 {
-  border-color: #2A2A35 !important;
+.w-\[40\%\] .text-black {
+  color: var(--foreground) !important;
 }
