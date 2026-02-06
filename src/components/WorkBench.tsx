@@ -4,6 +4,7 @@ import { useState } from "react";
 import { InteractableContractForm } from "@/lib/tambo";
 import InteractTab from "@/components/tabs/InteractTab";
 import HistoryTab from "@/components/tabs/HistoryTab";
+import VerifyTab from "@/components/tabs/VerifyTab";
 
 const TABS = ["Deploy", "Verify", "Interact", "History"] as const;
 type Tab = (typeof TABS)[number];
@@ -48,14 +49,7 @@ export default function Workbench() {
             }}
           />
         )}
-        {activeTab === "Verify" && (
-          <div className="text-[#6B6B80] text-sm">
-            <p>Contract verification will appear here.</p>
-            <p className="mt-1 text-xs">
-              Try: &quot;Verify my contract on Etherscan&quot;
-            </p>
-          </div>
-        )}
+        {activeTab === "Verify" && <VerifyTab />}
         {activeTab === "Interact" && <InteractTab />}
         {activeTab === "History" && <HistoryTab />}
       </div>

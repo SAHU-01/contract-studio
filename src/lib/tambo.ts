@@ -13,6 +13,7 @@ import ContractParamsForm, {
 import { getGlobalPopulationTrend } from "@/services/population-stats";
 import { SUPPORTED_CHAINS, getExplorerTxUrl } from "@/lib/chains";
 import { resolveTemplate } from "@/lib/contracts/templates";
+import { submitVerification, pollVerificationStatus, getERC20FlattenedSource } from "@/lib/verification";
 
 // ── Interactable: ContractParamsForm ──────────────────────
 const InteractableContractForm = withInteractable(ContractParamsForm, {
@@ -134,6 +135,195 @@ export const tools: TamboTool[] = [
       address: z.string().optional(),
       chainId: z.number().optional(),
       chainName: z.string().optional(),
+      error: z.string().optional(),
+    }),
+  },
+  // REPLACE the entire verifyContract tool block in tambo.ts with this:
+  
+  {
+    name: "verifyContract",
+    description:
+      "Verify a deployed contract's source code on Etherscan. The user can provide either the contract name (e.g. 'Nova', 'TestCoin') OR the contract address. The tool will look up the contract from deployment history in localStorage automatically. Do NOT ask the user for the address if they already gave you the contract name — just call this tool with contractName.",
+    tool: async (params?: {
+      contractAddress?: string;
+      contractName?: string;
+      chainId?: number;
+    }) => {
+      try {
+        // Find the deployment record from localStorage
+        const raw = localStorage.getItem("contract-studio-deployments");
+        const deployments = raw ? JSON.parse(raw) : [];
+
+        let deployment: any = null;
+
+        // Look up by address first
+        if (params?.contractAddress) {
+          deployment = deployments.find(
+            (d: any) =>
+              d.contractAddress?.toLowerCase() ===
+              params.contractAddress!.toLowerCase()
+          );
+        }
+
+        // If not found by address, look up by name
+        if (!deployment && params?.contractName) {
+          deployment = deployments.find(
+            (d: any) =>
+              d.contractName?.toLowerCase() ===
+              params.contractName!.toLowerCase()
+          );
+        }
+
+        if (!deployment) {
+          // List available contracts to help
+          const names = deployments.map((d: any) => `${d.contractName} (${d.contractAddress})`).join(", ");
+          return {
+            success: false,
+            error: `Contract not found in deployment history. Available contracts: ${names || "none"}`,
+          };
+        }
+
+        const contractAddress = deployment.contractAddress;
+        const chainId = params?.chainId || deployment.chainId || 11155111;
+        const ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY || "";
+
+        // Get constructor args from tx
+        let constructorArguments = "";
+        if (deployment.txHash) {
+          try {
+            const txUrl = `https://api.etherscan.io/v2/api?chainid=${chainId}&module=proxy&action=eth_getTransactionByHash&txhash=${deployment.txHash}&apikey=${ETHERSCAN_API_KEY}`;
+            const txResp = await fetch(txUrl);
+            const txData = await txResp.json();
+            if (txData.result?.input) {
+              const hex = txData.result.input.startsWith("0x")
+                ? txData.result.input.slice(2)
+                : txData.result.input;
+              const marker =
+                "0000000000000000000000000000000000000000000000000000000000000060" +
+                "00000000000000000000000000000000000000000000000000000000000000a0";
+              const idx = hex.lastIndexOf(marker);
+              if (idx !== -1) {
+                constructorArguments = hex.slice(idx);
+              }
+            }
+          } catch (e) {
+            console.warn("Could not extract constructor args:", e);
+          }
+        }
+
+        const sourceCode = getERC20FlattenedSource();
+
+        const result = await submitVerification({
+          contractAddress,
+          chainId,
+          sourceCode,
+          contractName: "DeployableToken",
+          constructorArguments,
+          optimizationUsed: false,
+          runs: 200,
+        });
+
+        if (result.success) {
+          const verifyKey = "contract-studio-verifications";
+          const existing = JSON.parse(localStorage.getItem(verifyKey) || "{}");
+          existing[contractAddress.toLowerCase()] = {
+            status: "pending",
+            message: "Submitted! Waiting for Etherscan...",
+            guid: result.guid,
+          };
+          localStorage.setItem(verifyKey, JSON.stringify(existing));
+
+          return {
+            success: true,
+            guid: result.guid,
+            message: `Verification submitted for ${deployment.contractName} (${contractAddress})! GUID: ${result.guid}. Check the Verify tab for status.`,
+            contractAddress,
+            chainId,
+          };
+        }
+
+        return { success: false, error: result.error };
+      } catch (e: any) {
+        return { success: false, error: e.message || "Verification failed" };
+      }
+    },
+    inputSchema: z.object({
+      contractName: z
+        .string()
+        .optional()
+        .describe("The contract name to verify (e.g. 'Nova', 'TestCoin'). Will look up the address from deployment history."),
+      contractAddress: z
+        .string()
+        .optional()
+        .describe("The deployed contract address to verify. Optional if contractName is provided."),
+      chainId: z
+        .number()
+        .optional()
+        .describe("Chain ID. Auto-detected from deployment history if not provided."),
+    }),
+    outputSchema: z.object({
+      success: z.boolean(),
+      guid: z.string().optional(),
+      message: z.string().optional(),
+      contractAddress: z.string().optional(),
+      chainId: z.number().optional(),
+      status: z.string().optional(),
+      error: z.string().optional(),
+    }),
+  },
+  {
+    name: "checkVerificationStatus",
+    description:
+      "Check the status of a contract verification submission on Etherscan. Requires the GUID returned from verifyContract.",
+    tool: async (params?: { guid?: string; chainId?: number }) => {
+      if (!params?.guid) {
+        return { success: false, error: "GUID is required." };
+      }
+      const chainId = params.chainId || 11155111;
+
+      try {
+        const result = await pollVerificationStatus(params.guid, chainId);
+
+        // Update localStorage if resolved
+        if (result.status !== "pending") {
+          const verifyKey = "contract-studio-verifications";
+          const existing = JSON.parse(
+            localStorage.getItem(verifyKey) || "{}"
+          );
+          for (const [addr, state] of Object.entries(existing)) {
+            if ((state as any).guid === params.guid) {
+              (state as any).status = result.status;
+              (state as any).message = result.message;
+            }
+          }
+          localStorage.setItem(verifyKey, JSON.stringify(existing));
+        }
+
+        return {
+          success: true,
+          status: result.status,
+          message: result.message,
+        };
+      } catch (e: any) {
+        return { success: false, error: e.message };
+      }
+    },
+    inputSchema: z.object({
+      guid: z
+        .string()
+        .describe("The GUID returned from verifyContract submission"),
+      chainId: z
+        .number()
+        .optional()
+        .describe("Chain ID (defaults to 11155111 Ethereum Sepolia)"),
+    }),
+    outputSchema: z.object({
+      success: z.boolean(),
+      guid: z.string().optional(),
+      message: z.string().optional(),
+      contractAddress: z.string().optional(),
+      chainId: z.number().optional(),
+      status: z.string().optional(),
       error: z.string().optional(),
     }),
   },
