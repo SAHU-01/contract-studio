@@ -51,6 +51,100 @@ Three layers:
 
 ---
 
+## 🎮 Sample Commands
+
+Try these in the chat to test the full workflow:
+
+### Wallet & Setup
+
+```
+Connect my wallet
+```
+
+```
+Switch to Base Sepolia
+```
+
+```
+What's my wallet balance?
+```
+
+### Deploy Tokens
+
+```
+Deploy an ERC-20 token called [Name of your token] with symbol [Symbol of choice], [token supply amount] supply, make it mintable and burnable, deploy on [chain of your choice]
+```
+
+```
+Deploy a pausable token called Phoenix PHX with 500k supply on Ethereum Sepolia
+```
+
+```
+Deploy the same contract to Arbitrum Sepolia
+```
+
+### Pre-Deploy Analysis
+
+```
+Run a security audit on this contract
+```
+
+```
+Compare gas costs across Base Sepolia, Arbitrum Sepolia, and Ethereum Sepolia
+```
+
+### Contract Interaction (post-deploy)
+
+```
+Mint 1000 GLX tokens to my address
+```
+
+```
+What's my GLX token balance?
+```
+
+```
+Read the totalSupply of my Galaxy contract
+```
+
+```
+Transfer 100 GLX tokens to 0x000000000000000000000000000000000000dead
+```
+
+```
+Burn 500 GLX tokens
+```
+
+```
+Pause the Galaxy contract
+```
+
+```
+Unpause the Galaxy contract
+```
+
+### Verification
+
+```
+Verify my Galaxy contract on Etherscan
+```
+
+### Blockchain Data (via MCP)
+
+```
+Get the gas price on Ethereum Sepolia
+```
+
+```
+Check the transaction status for 0x<your-tx-hash>
+```
+
+```
+Get contract info for 0x<your-contract-address>
+```
+
+---
+
 ## 🧩 Tambo Features Used (14/15)
 
 | # | Tambo Feature | Implementation |
