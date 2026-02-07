@@ -19,7 +19,7 @@ export default function StatusCard({ title = "Status", message = "", status = "i
   return (
     <div className={`rounded-lg p-4 ${colors.bg} border ${colors.border}`}>
       <h3 className={`font-semibold text-sm ${colors.text}`}>{title}</h3>
-      <p className="text-sm text-[#E8E8E8] mt-1">{message}</p>
+      <p className="text-sm text-[#E8E8E8] mt-1 break-all">{message}</p>
     </div>
   );
 }
