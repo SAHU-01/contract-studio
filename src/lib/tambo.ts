@@ -619,6 +619,7 @@ export const tools: TamboTool[] = [
           : "";
 
         // Save to deployment history
+        // Save to deployment history
         try {
           const record = {
             contractAddress,
@@ -636,6 +637,29 @@ export const tools: TamboTool[] = [
           const existing = JSON.parse(localStorage.getItem("contract-studio-deployments") || "[]");
           existing.unshift(record);
           localStorage.setItem("contract-studio-deployments", JSON.stringify(existing.slice(0, 50)));
+
+          // Sync to Supabase if authenticated
+          const authToken = localStorage.getItem("contract-studio-auth-token");
+          if (authToken) {
+            fetch("/api/deployments", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authToken}`,
+              },
+              body: JSON.stringify({
+                contractAddress,
+                contractName: args[0] || "Unknown",
+                symbol: args[1] || "???",
+                chainId,
+                chainName: chain?.name || "Chain " + chainId,
+                txHash,
+                initialSupply: args[2] || "0",
+                features,
+                explorerContractUrl,
+              }),
+            }).catch(() => {}); // Fire and forget
+          }
         } catch { /* ignore storage errors */ }
 
         return {
