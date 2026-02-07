@@ -4,9 +4,9 @@
 
 Contract Studio is a conversational smart contract deployment platform that replaces the traditional multi-tool workflow — Remix, Hardhat, MetaMask, Etherscan — with a single AI-powered chat interface. Type what you want, and the AI deploys, verifies, and manages your contracts.
 
-**🔗 [Live Demo](https://contract-studio.vercel.app)** · **📹 [Demo Video](https://youtube.com/)** · **🏆 Built for [Tambo "The UI Strikes Back" Hackathon](https://tambo.co)**
+**🔗 [Live Demo](https://contract-studio.vercel.app)** · **📹 [Demo Video](https://youtu.be/O6s82qfyiKg)** · **🏆 Built for [Tambo "The UI Strikes Back" Hackathon](https://tambo.co)**
 
-![Contract Studio](public/screenshot.png)
+![Contract Studio](public/screenshot.jpeg)
 
 ---
 
@@ -187,7 +187,7 @@ contract-studio/
 
 AI tools were used throughout the development of this project:
 
-- **Claude (Anthropic)** — Breaking the hackathon project into phased milestones and daily implementation plans. Understanding Tambo's feature set and mapping features to concrete use cases. Debugging MVP implementation issues including wallet connection flows, MCP server configuration, context helper integration, and component registration. Resolving context awareness integration bugs between Tambo's TamboProvider, local tools, and MCP servers. Writing and refining the demo video script and voiceover copy.
+- **Claude (Anthropic)** — Breaking the hackathon project into phased milestones and daily implementation plans. Understanding Tambo's feature set and mapping features to concrete use cases. Debugging implementation issues including MCP server configuration and context helper bugs. Resolving context awareness integration bugs between Tambo's TamboProvider, local tools, and MCP servers. Writing README and refining the demo video voiceover copy.
 
 - **ElevenLabs** — Text-to-speech generation for the demo video voiceover audio.
 
