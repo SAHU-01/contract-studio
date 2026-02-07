@@ -1,131 +1,205 @@
-# Tambo Template
+# Contract Studio 🏗️
 
-This is a starter NextJS app with Tambo hooked up to get your AI app development started quickly.
+> Deploy smart contracts through conversation. Built with [Tambo](https://tambo.co) generative UI.
 
-## Get Started
+Contract Studio is a conversational smart contract deployment platform that replaces the traditional multi-tool workflow — Remix, Hardhat, MetaMask, Etherscan — with a single AI-powered chat interface. Type what you want, and the AI deploys, verifies, and manages your contracts.
 
-1. Run `npm create-tambo@latest my-tambo-app` for a new project
+**🔗 [Live Demo](https://contract-studio.vercel.app)** · **📹 [Demo Video](https://youtube.com/)** · **🏆 Built for [Tambo "The UI Strikes Back" Hackathon](https://tambo.co)**
 
-2. `npm install`
+![Contract Studio](public/screenshot.png)
 
-3. `npx tambo init`
+---
 
-- or rename `example.env.local` to `.env.local` and add your tambo API key you can get for free [here](https://tambo.co/dashboard).
+## ✨ Features
 
-4. Run `npm run dev` and go to `localhost:3000` to use the app!
+- **Conversational Deployment** — "Deploy an ERC-20 called Galaxy with 1M supply on Sepolia" → form generates, MetaMask signs, contract deploys
+- **Contract Verification** — Etherscan verification via MCP server with elicitation for missing compiler details
+- **Contract Interaction** — Mint, burn, pause, transfer tokens directly from chat
+- **Multi-Chain Support** — Ethereum Sepolia, Base Sepolia, Arbitrum Sepolia
+- **Security Audit** — AI-generated security analysis with severity scoring
+- **Real-Time Blockchain Data** — Live gas prices, balances, and contract info via Etherscan MCP
+- **Wallet Authentication** — MetaMask wallet signature-based auth
+- **Persistent History** — Deployment history saved and synced across sessions
 
-## Customizing
+---
 
-### Change what components tambo can control
+## 🏗️ Architecture
 
-You can see how components are registered with tambo in `src/lib/tambo.ts`:
-
-```tsx
-export const components: TamboComponent[] = [
-  {
-    name: "Graph",
-    description:
-      "A component that renders various types of charts (bar, line, pie) using Recharts. Supports customizable data visualization with labels, datasets, and styling options.",
-    component: Graph,
-    propsSchema: graphSchema,
-  },
-  // Add more components here
-];
+```
+┌──────────────────────────────────────────────┐
+│              CONTRACT STUDIO                  │
+├───────────────────┬──────────────────────────┤
+│    AI Chat        │    Dynamic Workbench     │
+│    (Tambo)        │    (Generative UI)       │
+├───────────────────┴──────────────────────────┤
+│         LOCAL TOOLS (browser-side)            │
+│  wallet · signing · transactions · network    │
+├──────────────────────────────────────────────┤
+│         MCP SERVERS (server-side)             │
+│  Etherscan (6 tools) · Supabase (5 tools)    │
+├──────────────────────────────────────────────┤
+│   Next.js  ·  ethers.js  ·  TypeScript  ·    │
+│   Tambo SDK  ·  Zod  ·  Recharts             │
+└──────────────────────────────────────────────┘
 ```
 
-You can install the graph component into any project with:
+Three layers:
+
+- **Local Tools** run in the browser for wallet signing and transactions — things that can't happen server-side
+- **MCP Servers** connect to Etherscan and Supabase for real-time blockchain data and persistence
+- **Generative Components** render the UI dynamically — security audits, gas charts, deployment trackers — all streamed by the AI
+
+---
+
+## 🧩 Tambo Features Used (14/15)
+
+| # | Tambo Feature | Implementation |
+|---|---|---|
+| 1 | **Generative Components** | SecurityAudit, GasEstimation, DeploymentTracker, StatusCard |
+| 2 | **Interactable Components** | ContractParamsForm — AI fills fields, user edits, stays in sync |
+| 3 | **Local Tools (9)** | connectWallet, switchNetwork, sendDeployTransaction, readContract, callContractFunction, estimateDeployGas, getContractTemplate, fetchGasPrices, submitVerification |
+| 4 | **MCP Server — Etherscan** | getContractInfo, getTokenInfo, getGasPrice, getTransactionStatus, getAccountBalance, verifyContract |
+| 5 | **MCP Server — Supabase** | Deployment history CRUD, user data persistence |
+| 6 | **MCP Elicitation** | verifyContract requests compiler settings mid-execution when missing |
+| 7 | **Context Helpers** | walletState, deployedContracts, currentView — AI always knows app state |
+| 8 | **Suggestions** | Context-aware action chips that adapt per workflow stage |
+| 9 | **System Prompt** | Custom instructions for deploy flow and tool chaining |
+| 10 | **Streaming** | Progressive prop-level rendering on generative components |
+| 11 | **Conversation Storage** | Thread persistence across sessions |
+| 12 | **Thread History** | Sidebar with past conversations |
+| 13 | **User Authentication** | MetaMask wallet signature → Tambo userToken |
+| 14 | **Agent Configuration** | Model selection and custom LLM params via Dashboard |
+
+Only **Canvas Space** (15th feature) was skipped — not relevant for this application.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 14, TypeScript |
+| AI / Generative UI | Tambo SDK (`@tambo-ai/react`) |
+| Blockchain | ethers.js v6 |
+| MCP Servers | Next.js API routes (Etherscan, Supabase) |
+| Database | Supabase (PostgreSQL) |
+| Styling | Tailwind CSS |
+| Charts | Recharts |
+| Schemas | Zod |
+| Deployment | Vercel |
+
+---
+
+## ⚡ Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- MetaMask browser extension
+- Tambo API key ([get one free](https://tambo.co))
+- Etherscan API key ([get one free](https://etherscan.io/apis))
+
+### Setup
 
 ```bash
-npx tambo add graph
+# Clone
+git clone https://github.com/SAHU-01/contract-studio.git
+cd contract-studio
+
+# Install
+npm install
+
+# Environment
+cp .env.example .env.local
 ```
 
-The example Graph component demonstrates several key features:
+Add your keys to `.env.local`:
 
-- Different prop types (strings, arrays, enums, nested objects)
-- Multiple chart types (bar, line, pie)
-- Customizable styling (variants, sizes)
-- Optional configurations (title, legend, colors)
-- Data visualization capabilities
-
-Update the `components` array with any component(s) you want tambo to be able to use in a response!
-
-You can find more information about the options [here](https://docs.tambo.co/concepts/generative-interfaces/generative-components)
-
-### Add tools for tambo to use
-
-Tools are defined with `inputSchema` and `outputSchema`:
-
-```tsx
-export const tools: TamboTool[] = [
-  {
-    name: "globalPopulation",
-    description:
-      "A tool to get global population trends with optional year range filtering",
-    tool: getGlobalPopulationTrend,
-    inputSchema: z.object({
-      startYear: z.number().optional(),
-      endYear: z.number().optional(),
-    }),
-    outputSchema: z.array(
-      z.object({
-        year: z.number(),
-        population: z.number(),
-        growthRate: z.number(),
-      }),
-    ),
-  },
-];
+```env
+NEXT_PUBLIC_TAMBO_API_KEY=
+ETHERSCAN_API_KEY=
+NEXT_PUBLIC_ETHERSCAN_API_KEY=
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 ```
 
-Find more information about tools [here.](https://docs.tambo.co/concepts/tools)
-
-### The Magic of Tambo Requires the TamboProvider
-
-Make sure in the TamboProvider wrapped around your app:
-
-```tsx
-...
-<TamboProvider
-  apiKey={process.env.NEXT_PUBLIC_TAMBO_API_KEY!}
-  components={components} // Array of components to control
-  tools={tools} // Array of tools it can use
->
-  {children}
-</TamboProvider>
+```bash
+# Run
+npm run dev
 ```
 
-In this example we do this in the `Layout.tsx` file, but you can do it anywhere in your app that is a client component.
+Open [http://localhost:3000](http://localhost:3000) and start chatting.
 
-### Voice input
+### Testnet Setup
 
-The template includes a `DictationButton` component using the `useTamboVoice` hook for speech-to-text input.
+You need testnet ETH to deploy contracts:
 
-### MCP (Model Context Protocol)
+- **Ethereum Sepolia** — [sepoliafaucet.com](https://sepoliafaucet.com)
+- **Base Sepolia** — [faucet.quicknode.com/base/sepolia](https://faucet.quicknode.com/base/sepolia)
+- **Arbitrum Sepolia** — [faucet.quicknode.com/arbitrum/sepolia](https://faucet.quicknode.com/arbitrum/sepolia)
 
-The template includes MCP support for connecting to external tools and resources. You can use the MCP hooks from `@tambo-ai/react/mcp`:
+---
 
-- `useTamboMcpPromptList` - List available prompts from MCP servers
-- `useTamboMcpPrompt` - Get a specific prompt
-- `useTamboMcpResourceList` - List available resources
+## 📁 Project Structure
 
-See `src/components/tambo/mcp-components.tsx` for example usage.
-
-### Change where component responses are shown
-
-The components used by tambo are shown alongside the message response from tambo within the chat thread, but you can have the result components show wherever you like by accessing the latest thread message's `renderedComponent` field:
-
-```tsx
-const { thread } = useTambo();
-const latestComponent =
-  thread?.messages[thread.messages.length - 1]?.renderedComponent;
-
-return (
-  <div>
-    {latestComponent && (
-      <div className="my-custom-wrapper">{latestComponent}</div>
-    )}
-  </div>
-);
+```
+contract-studio/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx              # TamboProvider, context helpers, system prompt
+│   │   ├── page.tsx                # Main chat + workbench layout
+│   │   └── api/
+│   │       ├── mcp/
+│   │       │   └── etherscan/
+│   │       │       └── route.ts    # Etherscan MCP server (6 tools + elicitation)
+│   │       └── auth/
+│   │           └── wallet/
+│   │               └── route.ts    # MetaMask wallet auth endpoint
+│   ├── components/
+│   │   ├── generative/             # AI-rendered components
+│   │   │   ├── SecurityAudit.tsx
+│   │   │   ├── GasEstimation.tsx
+│   │   │   ├── DeploymentTracker.tsx
+│   │   │   └── StatusCard.tsx
+│   │   ├── interactable/           # Persistent, editable components
+│   │   │   └── ContractParamsForm.tsx
+│   │   ├── tabs/                   # Workbench tabs
+│   │   │   ├── DeployTab.tsx
+│   │   │   ├── VerifyTab.tsx
+│   │   │   ├── InteractTab.tsx
+│   │   │   └── HistoryTab.tsx
+│   │   └── tambo/                  # Tambo UI components
+│   ├── hooks/
+│   │   └── useWalletAuth.ts        # Wallet auth hook
+│   └── lib/
+│       ├── tambo.ts                # Component + tool registration
+│       ├── chains.ts               # Chain configs (Sepolia, Base, Arbitrum)
+│       ├── contracts/              # ERC-20 ABI + bytecode templates
+│       └── supabase.ts             # Supabase client
+├── .env.local
+└── package.json
 ```
 
-For more detailed documentation, visit [Tambo's official docs](https://docs.tambo.co).
+---
+
+## 🤖 AI Usage Disclosure
+
+AI tools were used throughout the development of this project:
+
+- **Claude (Anthropic)** — Breaking the hackathon project into phased milestones and daily implementation plans. Understanding Tambo's feature set and mapping features to concrete use cases. Debugging MVP implementation issues including wallet connection flows, MCP server configuration, context helper integration, and component registration. Resolving context awareness integration bugs between Tambo's TamboProvider, local tools, and MCP servers. Writing and refining the demo video script and voiceover copy.
+
+- **ElevenLabs** — Text-to-speech generation for the demo video voiceover audio.
+
+- **Midjourney / Image Generation** — Creating illustration assets for the demo video intro and architecture diagrams.
+
+All code was written, tested, and deployed by the developer. AI was used as a development accelerator, not a code generator — every implementation was understood, reviewed, and adapted to the specific requirements of the project.
+
+---
+
+## Acknowledgments
+
+- [Tambo](https://tambo.co) — Generative UI SDK
+- [Etherscan](https://etherscan.io) — Blockchain explorer APIs
+- [OpenZeppelin](https://openzeppelin.com) — ERC-20 contract templates
+- [Supabase](https://supabase.com) — Database and authentication
